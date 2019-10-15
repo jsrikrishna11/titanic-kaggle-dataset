@@ -22,3 +22,12 @@ geom_bar()+
 xlab("Pclass")+
 ylab("Total Count")+
 labs(fill = "Survived")
+
+#examine first few names in training data set
+head(as.character(data.combined$Name))
+
+#unique names are there across train and tests
+length(unique(as.character(data.combined$Name)))
+
+#two duplicate names, let's get them!
+dup.names = as.character(data.combined[which(duplicated(as.character(data.combined$Name))),"Name"])
