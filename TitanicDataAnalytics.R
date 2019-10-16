@@ -66,8 +66,8 @@ extractTitle <- function(name){
   else if(length(grep("Mrs.", name))>0){
     return("Mrs.")
   }
-  else if(length(grep("Master", name))>0){
-    return("Master")
+  else if(length(grep("Master.", name))>0){
+    return("Master.")
   }
   else if(length(grep("Mr.", name))>0){
     return("Mr.")
@@ -108,7 +108,7 @@ ggplot(data.combined[1:891,], aes(x=Sex, fill=Survived))+
 #age over the entire dataset
 
 summary(data.combined$Age)
-#####Output and Other related important notes#####
+#Output and Other related important notes
 #Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
 #0.17   21.00   28.00   29.88   39.00   80.00     263 
 #"NA" are roughly 20% of the observations!!!
@@ -133,12 +133,13 @@ ggplot(data.combined[1:891,], aes(x=Age, fill=Survived))+
   labs(fill="Survived")
 
 #Validate that "Master." is a good proxy for male children?
-boys <- data.combined[which(data.combined$title =="Master"),]
+boys <- data.combined[which(data.combined$title =="Master."),]
 summary(boys$Age)
 
-####Output####
+#Output
 # Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
 # 0.330   2.000   4.000   5.483   9.000  14.500       8 
 #Master is a resonable proxy
 
+#Lets try for miss
 
