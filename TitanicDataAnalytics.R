@@ -91,3 +91,54 @@ ggplot(data.combined[1:891,], aes(x=title, fill=Survived))+
   xlab("Title")+
   ylab("Total Count")+
   labs(fill = "Survived")
+
+#What's the distribution of males to females in the entire dataset?
+table(data.combined$Sex)
+
+#Visualize the 3-way relationship between sex, pclass and survival rate?
+ggplot(data.combined[1:891,], aes(x=Sex, fill=Survived))+
+  geom_bar(width = 0.75)+
+  facet_wrap(~Pclass)+
+  ggtitle("Pclass")+
+  xlab("Sex")+
+  ylab("Total Count")+
+  labs(fill = "Survived")
+
+#Age and sex seem very important for survival. Lets look at age distribution of
+#age over the entire dataset
+
+summary(data.combined$Age)
+#####Output and Other related important notes#####
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+#0.17   21.00   28.00   29.88   39.00   80.00     263 
+#"NA" are roughly 20% of the observations!!!
+#there are two ways to deal with this:
+# 1. either we replace the "NA" with the median value (inferring the value)
+# or
+# 2. imputation: we create a predictive model to predict what the value in that 
+# observation should be.
+# 3. try to find a proxy for that variable
+
+#:Lets just see for training data
+summary(data.combined[1:891,]$Age)
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+# 0.42   20.12   28.00   29.70   38.00   80.00     177
+
+#lets just check survival rate broken out by sex and pclass
+ggplot(data.combined[1:891,], aes(x=Age, fill=Survived))+
+  facet_wrap(~Sex + Pclass)+
+  geom_histogram(bins = 10)+
+  xlab("Age")+
+  ylab("Total Count")+
+  labs(fill="Survived")
+
+#Validate that "Master." is a good proxy for male children?
+boys <- data.combined[which(data.combined$title =="Master"),]
+summary(boys$Age)
+
+####Output####
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+# 0.330   2.000   4.000   5.483   9.000  14.500       8 
+#Master is a resonable proxy
+
+
