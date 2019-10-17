@@ -153,11 +153,52 @@ summary(girls$Age)
 #adult end of the spectrum
 
 #lets just get a ggplot
-ggplot(girls[girls$Survived!="None",], aes(x=Age, fill = Survived))+
-  geom_bar(stat = "count")+
+ggplot(girls[which(girls$Survived!="None" & !is.na(girls$Age)),], aes(x=Age, fill = Survived))+
+  geom_bar(stat = "count", width = 5.0)+
   facet_wrap(~Pclass)
   xlab("Age")+
   ylab("Total Count")+
   labs(fill="Survived")
   
-  
+#It appears that alone misses are more likely to die?
+#lets just confirm that?
+girls.alone = girls[which(girls$SibSp==0 & girls$Parch==0),]
+summary(girls.alone$Age)
+
+ggplot(girls.alone[which(girls.alone$Age>=14.5),], aes(x=Age))+
+  geom_histogram(stat="count")+
+  xlab("Age")+
+  ylab("Total Count")+
+  ggtitle("Age distribution among alone women")
+
+#lets try to get a summary of SibSp variable?
+summary(girls$SibSp)
+# #output
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+# 0.0000  0.0000  0.0000  0.6654  1.0000  8.0000 
+#But this doesn't make any sense as there can't be 0.6654 siblings?
+#So, should we treat it as a categorical data? I think we should!
+length(unique(data.combined$SibSp))
+data.combined$SibSp = as.factor(data.combined$SibSp)
+
+summary(data.combined$SibSp[1:891])
+
+ggplot(data.combined[1:891,], aes(x=SibSp , fill=Survived))+
+  geom_bar(width = 1, stat="count")+
+  facet_wrap(~Pclass + title)+
+  xlab("SibSp")+
+  ylab("Total Count")+
+  labs(fill="Survived")
+
+#do the same thing for parch
+data.combined$Parch = as.factor(data.combined$Parch)
+
+summary(data.combined$Parch[1:891])
+
+ggplot(data.combined[1:891,], aes(x=Parch , fill=Survived))+
+  geom_bar(width = 1, stat="count")+
+  facet_wrap(~Pclass + title)+
+  xlab("Parch")+
+  ylab("Total Count")+
+  labs(fill="Survived")
+
