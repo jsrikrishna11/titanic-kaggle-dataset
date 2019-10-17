@@ -141,5 +141,23 @@ summary(boys$Age)
 # 0.330   2.000   4.000   5.483   9.000  14.500       8 
 #Master is a resonable proxy
 
-#Lets try for miss
+#Lets try for "Miss."
+girls <- data.combined[which(data.combined$title=="Miss."),]
+summary(girls$Age)
 
+#OUTPUT
+# Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+# 0.17   15.00   22.00   21.77   30.00   63.00      50 
+#"Miss." IS MORE COMPLICATED!!!
+#most records i.e. almost 75% of the records tend to be towards
+#adult end of the spectrum
+
+#lets just get a ggplot
+ggplot(girls[girls$Survived!="None",], aes(x=Age, fill = Survived))+
+  geom_bar(stat = "count")+
+  facet_wrap(~Pclass)
+  xlab("Age")+
+  ylab("Total Count")+
+  labs(fill="Survived")
+  
+  
