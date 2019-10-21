@@ -202,3 +202,63 @@ ggplot(data.combined[1:891,], aes(x=Parch , fill=Survived))+
   ylab("Total Count")+
   labs(fill="Survived")
 
+
+#Feature engineering!
+#Lets make a new feature called "FamilySize" which will provide a better
+#insight for us to predict!
+
+train.familysize = train$SibSp + train$Parch
+test.familysize = test$Parch + test$SibSp
+
+data.combined$FamilySize = c(train.familysize+1, test.familysize+1)
+
+summary(data.combined$FamilySize)
+
+data.combined$FamilySize = as.factor(data.combined$FamilySize)
+
+#Lets make a ggplot!
+
+ggplot(data.combined[1:891,], aes(x=FamilySize, fill=Survived))+
+  geom_bar(stat="count")+
+  #facet_wrap(~Pclass + title)+
+  xlab("Family Size")+
+  ylab("Total Count")+
+  labs("Survived")
+
+#lets look at ticket
+str(data.combined$Ticket)
+#it has 929 levels, this clearly isn't a factor variable, so lets just 
+#convert it into character
+data.combined$Ticket = as.character(data.combined$Ticket)
+ticket.first.char = ifelse(data.combined$Ticket == "", "", substr(data.combined$Ticket,1,1))
+unique(ticket.first.char)
+
+#since there are few unique classes lets factorise them 
+ticket.first.char = as.factor(ticket.first.char)
+
+data.combined$Ticket.First = ticket.first.char
+
+ggplot(data.combined[1:891,], aes(x=Ticket.First, fill=Survived))+
+  geom_bar(stat="count", width = 1)+
+  #facet_wrap(~Pclass+ FamilySize )
+  xlab("Ticket")+
+  ylab("Total Count")+
+  labs(fill="Survived")+
+  ggtitle("Ticket and survival rates")
+  
+#Now ticket and pclass 
+ggplot(data.combined[1:891,], aes(x=Ticket.First, fill=Survived))+
+  geom_bar(stat="count", width = 1)+
+  facet_wrap(~Pclass)
+  xlab("Ticket")+
+  ylab("Total Count")+
+  labs(fill="Survived")+
+  ggtitle("Ticket and survival rates divided based on Pclass")
+
+#people who came alone to titanic  
+ggplot(data.combined[which(data.combined[1:891,]$FamilySize==1),], aes(x=Sex, fill=Survived))+
+  geom_bar(stat="count")+
+  xlab("Sex")+
+  ylab("Total Count")+
+  labs(fill="Survived")
+
